@@ -34,8 +34,11 @@ class StudentController extends Controller
                 'max:255',
                 'unique:students,email',
             ],
-            'course' => ['required', 'string', 'max:255'],
+            'course' => ['nullable', 'string', 'max:255'],
         ]);
+
+        // Siguraduhing may laman ang course kahit blangko ang input sa frontend
+        $validated['course'] = $validated['course'] ?? 'N/A';
 
         $student = Student::create($validated);
 
@@ -59,8 +62,11 @@ class StudentController extends Controller
                 'max:255',
                 Rule::unique('students', 'email')->ignore($student->id),
             ],
-            'course' => ['required', 'string', 'max:255'],
+            'course' => ['nullable', 'string', 'max:255'],
         ]);
+
+        // Siguraduhing may laman ang course kahit blangko ang input sa frontend
+        $validated['course'] = $validated['course'] ?? $student->course ?? 'N/A';
 
         $student->update($validated);
 
